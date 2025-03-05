@@ -1,0 +1,14 @@
+.sasuke{
+    background-color: orange;
+    border: solid black 3px;
+    border-radius: 5px;
+    font-family: cursive;
+    text-align: center;
+    display: inline-block;
+    margin: 10px;
+}
+.sasuke img{
+    width: 350px;
+    height: 250px
+ 
+}
