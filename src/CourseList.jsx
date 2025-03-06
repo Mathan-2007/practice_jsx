@@ -1,26 +1,10 @@
     import Sasukee from './course'
     import { useEffect, useState } from 'react'
-
+    import useFetch from './useFetch'
+    
     function CourseList(){
-    const [sasukes,setsasukes] =useState(null);
-    const [error,seterror]=useState(null)
-    useEffect(()=>{
-        setTimeout(() => {
-            fetch('http://localhost:3000/sasukes')
-    .then(response => {console.log(response);
-        if(!response.ok){
-            throw Error ("couldn't retrive")
-        }
-                    return response.json()
-    }).then(data=>setsasukes(data))
-    .catch((error)=>{
-        console.log(error.message)
-        seterror(error.message)
-    })
-        }, 1000);
-        
-    },[]);
-
+   
+const[sasukes,error]=useFetch('http://localhost:3000/sasukes')
         // sasukes.sort((y,x) => y.id-x.id)
 
         // const Sasukes = sasukes.filter((sasukes) => sasukes.id<5)
