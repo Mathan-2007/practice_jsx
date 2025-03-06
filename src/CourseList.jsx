@@ -1,64 +1,54 @@
-import Sasukee from './course'
-import sasuke from './assets/sasuke.jpg'
-import sasuke2 from './assets/sasuke2.png'
-import sasuke3 from './assets/sasuke3.jpg'
-import sasuke4 from './assets/sasuke4.jpg'
-import { useEffect, useState } from 'react'
+    import Sasukee from './course'
+    import { useEffect, useState } from 'react'
 
-function CourseList(){
-const [sasukes,setsasukes] =useState( [
-        {
-            id:1,
-            name : "sasuke",
-            skill:"rinnegan",
-            image:sasuke
-        },
-        {
-            id:2,
-            name:"sasuke 2",
-            skill:"sharingan",
-            image:sasuke2
-        },
-        {
-            id:3,
-            name:"sasuke 3",
-            skill:"susano",
-            image:sasuke3
-        },
-        {
-            id:4,
-            name:"sasuke 4",
-            skill:"chidori",
-            image:sasuke4
-        }
-    ]);
-
+    function CourseList(){
+    const [sasukes,setsasukes] =useState(null);
+    const [error,seterror]=useState(null)
     useEffect(()=>{
-        console.log("Delete")
-    });
+        setTimeout(() => {
+            fetch('http://localhost:3000/sasukes')
+    .then(response => {console.log(response);
+        if(!response.ok){
+            throw Error ("couldn't retrive")
+        }
+                    return response.json()
+    }).then(data=>setsasukes(data))
+    .catch((error)=>{
+        console.log(error.message)
+        seterror(error.message)
+    })
+        }, 1000);
+        
+    },[]);
 
-    sasukes.sort((y,x) => y.id-x.id)
+        // sasukes.sort((y,x) => y.id-x.id)
 
-    const Sasukes = sasukes.filter((sasukes) => sasukes.id<5)
+        // const Sasukes = sasukes.filter((sasukes) => sasukes.id<5)
 
-    const coursesList=Sasukes.map(
-        (sasukes) => <Sasukee 
-        key={sasukes.id}
-        name={sasukes.name} 
-        id={sasukes.id}
-        skill={sasukes.skill} 
-        image={sasukes.image}
-        delete={handleDelete}/>
+        if(!sasukes){
+            return(
+                <>
+                {!error && <p>Loading...</p>}
+                <p>{error}</p>
+                </>
+                )}
 
-    )
-return(<>
-  {coursesList}
-  </>)
+        const coursesList=sasukes.map(
+            (sasukes) => <Sasukee 
+            key={sasukes.id}
+            name={sasukes.name} 
+            skill={sasukes.skill} 
+            image={sasukes.image}
+            delete={handleDelete}/>
 
-  
-  function handleDelete(id) {
-    const Newcourse =sasukes.filter((sasuke)=> sasuke.id != id)
-    setsasukes(Newcourse)
-}
-}
-export default CourseList
+        )
+    return(<>
+    {coursesList}
+    </>)
+
+    
+    function handleDelete(event) {
+        event.target.parentElement.remove()
+    }
+    }
+    export default CourseList
